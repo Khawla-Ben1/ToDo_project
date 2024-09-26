@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page - ToDo App</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Link to your CSS file if you have one -->
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Your ToDo List!</h1>
+        
+        <form method="POST" action="{% url 'tasks:create' %}"> <!-- Adjust action URL if needed -->
+            {% csrf_token %}
+            <div>
+                <label for="task">Add a new task:</label>
+                <input type="text" id="task" name="task" required>
+            </div>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <h2>Your Tasks:</h2>
+        <ul>
+            {% for task in tasks %}
+                <li>{{ task.title }} 
+                    <form method="POST" action="{% url 'tasks:delete' task.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% empty %}
+                <li>No tasks available.</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'logout' %}">Logout</a> <!-- Add a logout link -->
+    </div>
+</body>
+</html>
